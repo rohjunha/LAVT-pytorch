@@ -4,6 +4,7 @@ data/refcoco/*
 data/refcoco+/*
 data/refcocog/*
 data/refclef/*
+checkpoint/*
 *.pth
 *.txt
 *.zip

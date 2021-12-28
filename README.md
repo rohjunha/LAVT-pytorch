@@ -5,13 +5,13 @@
 
 目前和原论文仍有1%左右得差距，但已经力压很多SOTA了
 
-| ckpt__448_epoch_25.pth | mIoU   | Overall IoU |
-| ---------------------- | ------ | ----------- |
-| Refcoco val            | 70.743 | 71.671      |
-| Refcoco testA          | 73.679 | 74.772      |
-| Refcoco testB          | 67.582 | 67.339      |
+| ckpt__448_epoch_25.pth | mIoU   | Overall IoU | prec@0.5 |
+| ---------------------- | ------ | ----------- |--------  |
+| Refcoco val            | 70.743 | 71.671      | 82.26    |
+| Refcoco testA          | 73.679 | 74.772      |    -     |
+| Refcoco testB          | 67.582 | 67.339      |    -     |
 
-
+> the pretrain model will be released soon
 
 > 对原论文的复现
 >
@@ -93,3 +93,12 @@ results
 
 ![](./image/res(1).png)
 
+## failure cases study
+
+`AnalysisFailure.ipynb` 提供了一个研究model不work的途径,主要是筛选了`IoU < 0.5`的case,并在这些case中着重查看了一下`IoU < 0.1` 和 `0.4 < IoU < 0.5` 的例子
+
+目前我只看了一些有限的failure cases,做了如下总结
+
+* 模型对于similar,dense object在language guide下定位不精确
+* 模型对于language的理解不分主次
+* refcoco本身标记的一些问题
