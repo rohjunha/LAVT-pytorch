@@ -1,15 +1,25 @@
 # LAVT: Language-Aware Vision Transformer for Referring Image Segmentation
 
 ## Where we are ?
-![](./image/sota.jpg)
+![](./image/chart.jpg)
 
-目前和原论文仍有1%左右得差距，但已经力压很多SOTA了
+12.27 目前和原论文仍有1%左右得差距，但已经力压很多SOTA了
 
 | ckpt__448_epoch_25.pth | mIoU   | Overall IoU | prec@0.5 |
 | ---------------------- | ------ | ----------- |--------  |
 | Refcoco val            | 70.743 | 71.671      | 82.26    |
 | Refcoco testA          | 73.679 | 74.772      |    -     |
 | Refcoco testB          | 67.582 | 67.339      |    -     |
+
+12.29 45epoch的结果又上升了大约1%
+
+| ckpt__448_epoch_45.pth | mIoU   | Overall IoU | 
+| ---------------------- | ------ | ----------- |
+| Refcoco val            | 71.949 | 72.246      |
+| Refcoco testA          | 74.533 | 75.467      |
+| Refcoco testB          | 67.849 | 68.123      |
+
+![](./image/45epoch_val.png)
 
 > the pretrain model will be released soon
 
@@ -22,7 +32,7 @@
 ## Architecture
 ![](./image/LAVT.png)
 
-## 特点
+## Features
 * 将不同模态feature的fusion提前到Image Encoder阶段
 * 思路上对这两篇论文有很多借鉴
   
@@ -33,7 +43,7 @@
     
 * 采用了比较新的主干网络 Swin-Transformer
 
-## 用法
+## Usage
 详细参数设置可以见`args.py`
 
 for training
@@ -55,8 +65,12 @@ for resume from checkpoint
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node 4 --master_port 12346 main.py --batch_size 2 --cfg_file configs/swin_base_patch4_window7_224.yaml --size 448 --resume --pretrain ckpt_448_epoch_10.pth
 ```
 
+for dataset preparation
 
-## 需要完善的地方
+please get details from `./data/readme.md`
+
+
+## Need to be finished
 
 由于我在复现的时候，官方的code还没有出来,所以一些细节上的设置可能和官方code不同
 
@@ -81,7 +95,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
   > 实验发现这种`eval_mode` 下的`mean IOU` 会好不少, `overall_IOU` 也会好一点
   * 对同一张图片处理多次处理,然后将结果进行平均,Input 形式上就是 ((Image,sent_1),(Image,sent_2),(Image,sent_3)) => model => average(pred_1,pred_2,pred_3)
 
-## 结果呈现
+## Visualization
 
 详细见`inference.ipynb`
 
@@ -93,7 +107,7 @@ results
 
 ![](./image/res(1).png)
 
-## failure cases study
+## Failure cases study
 
 `AnalysisFailure.ipynb` 提供了一个研究model不work的途径,主要是筛选了`IoU < 0.5`的case,并在这些case中着重查看了一下`IoU < 0.1` 和 `0.4 < IoU < 0.5` 的例子
 
