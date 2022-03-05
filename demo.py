@@ -7,7 +7,7 @@ from dataset.ReferDataset import ReferDataset
 from dataset.transform import get_transform
 from args import get_parser
 import config
-from model.LVAT import LVAT,criterion
+from model.LAVT import LVAT,criterion
 import random
 import torch.nn.functional as F
 from torch.utils.data import DataLoader

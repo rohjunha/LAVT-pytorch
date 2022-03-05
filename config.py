@@ -8,6 +8,7 @@
 Config for Swin transformer
 """
 import os
+
 import yaml
 from yacs.config import CfgNode as CN
 
@@ -75,12 +76,13 @@ _C.MODEL.SWIN.PATCH_NORM = True
 
 # Path to output folder, overwritten by command line argument
 _C.OUTPUT = './checkpoint'
-_C.TRAIN=CN()
-_C.TRAIN.USE_CHECKPOINT=False
-_C.PRETRAIN=CN()
-_C.PRETRAIN.PATH=''
+_C.TRAIN = CN()
+_C.TRAIN.USE_CHECKPOINT = False
+_C.PRETRAIN = CN()
+_C.PRETRAIN.PATH = ''
 
-def _update_config_from_file(config,cfg_file):
+
+def _update_config_from_file(config, cfg_file):
     config.defrost()
     with open(cfg_file, 'r') as f:
         yaml_cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -94,10 +96,11 @@ def _update_config_from_file(config,cfg_file):
     config.merge_from_file(cfg_file)
     config.freeze()
 
+
 def get_config(args):
     """Get a yacs CfgNode object with default values."""
     # Return a clone so that the defaults will not be altered
     # This is for the "local variable" use pattern
     config = _C.clone()
-    _update_config_from_file(config,args.cfg_file)
+    _update_config_from_file(config, args.cfg_file)
     return config
