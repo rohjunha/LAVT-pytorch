@@ -1,0 +1,5 @@
+timm
+pycocotools
+transformers
+yacs
+termcolor
