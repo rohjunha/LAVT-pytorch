@@ -8,6 +8,7 @@ from model.segmentation import Segmentation
 from model.swin_transformer import build_model
 from utils.poly_lr_decay import PolynomialLRDecay
 from utils.util import load_pretrained_swin
+from deepspeed.ops.adam import DeepSpeedCPUAdam
 
 
 class LAVT(pl.LightningModule):
@@ -31,9 +32,10 @@ class LAVT(pl.LightningModule):
         return F.interpolate(pred, scale_factor=int(H // h), mode='bilinear', align_corners=True)
 
     def configure_optimizers(self):
-        optimizer = AdamW(params=self.parameters(),
-                          lr=self.args.lr,
-                          weight_decay=self.args.weight_decay)
+        opt_cls = DeepSpeedCPUAdam
+        optimizer = opt_cls(self.parameters(),
+                            lr=self.args.lr,
+                            weight_decay=self.args.weight_decay)
         scheduler = PolynomialLRDecay(optimizer,
                                       max_decay_steps=self.args.max_decay_steps,
                                       end_learning_rate=self.args.end_lr,
@@ -80,12 +82,17 @@ class LAVT(pl.LightningModule):
         I = torch.sum(torch.mul(pred, target)) * 1.0
         U = torch.sum(torch.add(pred, target)) * 1.0 - I
         IoU = I * 1.0 / U  # [overall IOU of batch]
-        return {'i': I, 'u': U, 'iou': IoU, 'batch_size': batch_size}
+        self.log('i', I)
+        self.log('u', U)
+        self.log('iou', IoU)
+        return F.cross_entropy(output, target)
 
-    def validation_step_end(self, val_step_outputs):
-        self.log('i', val_step_outputs['i'].item())
-        self.log('u', val_step_outputs['u'].item())
-        self.log('iou', val_step_outputs['iou'].item())
+        # return {'i': I, 'u': U, 'iou': IoU, 'batch_size': batch_size}
+
+    #def validation_step_end(self, val_step_outputs):
+    #    self.log('i', val_step_outputs['i'].item())
+    #    self.log('u', val_step_outputs['u'].item())
+    #    self.log('iou', val_step_outputs['iou'].item())
         # print('val_step_outputs', val_step_outputs)
         # i, u, iou, bsizes = [], [], [], []
         # for output in val_step_outputs:

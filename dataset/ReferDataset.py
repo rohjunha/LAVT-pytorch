@@ -128,4 +128,10 @@ class ReferDataset(data.Dataset):
             tensor_embeddings = self.input_ids[index][choice_sent]
             attention_mask = self.attention_masks[index][choice_sent]
 
+        #print('data')
+        #print('  img', img.shape)
+        #print('  tar', target.shape)
+        #print('  emb', tensor_embeddings.shape)
+        #print('  att', attention_mask.shape)
+
         return img, target, tensor_embeddings, attention_mask

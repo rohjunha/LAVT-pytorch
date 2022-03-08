@@ -7,6 +7,16 @@ from dataset.ReferDataset import ReferDataset
 from dataset.transform import get_transform
 from model.LAVT import LAVT
 
+from pytorch_lightning.plugins import DeepSpeedPlugin
+
+
+class CustomDDPPlugin(DeepSpeedPlugin):
+    def configure_ddp(self):
+        self.pre_configure_ddp()
+        self._model = self._setup_model(LightningDistributedModule(self.model))
+        self._register_ddp_hooks()
+        self._model._set_static_graph() # THIS IS THE MAGIC LINE
+
 
 def main(args, cfg):
     train_dataset = ReferDataset(args,
@@ -26,8 +36,12 @@ def main(args, cfg):
                             num_workers=8,
                             pin_memory=True)
     model = LAVT(cfg, args)
-    trainer = pl.Trainer(max_epochs=args.epoch, gpus=1)
-    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=val_loader)
+    trainer = pl.Trainer(max_epochs=args.epoch,
+                         gpus=4, 
+                         strategy=CustomDDPPlugin(stage=2, offload_optimizer=True), #'deepspeed_stage_2', #CustomDDPPlugin(), #'deepspeed_stage_2_offload', #'deepspeed_stage_2_offload',
+                         gradient_clip_val=0.5,
+                         num_sanity_val_steps=0)
+    trainer.fit(model, train_dataloaders=train_loader)  # val_dataloaders=val_loader)
 
 
 #
