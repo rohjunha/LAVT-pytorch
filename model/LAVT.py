@@ -2,13 +2,12 @@ import pytorch_lightning as pl
 import torch
 import torch.nn.functional as F
 import transformers
-from torch.optim import AdamW
+from deepspeed.ops.adam import DeepSpeedCPUAdam
 
 from model.segmentation import Segmentation
 from model.swin_transformer import build_model
 from utils.poly_lr_decay import PolynomialLRDecay
 from utils.util import load_pretrained_swin
-from deepspeed.ops.adam import DeepSpeedCPUAdam
 
 
 class LAVT(pl.LightningModule):

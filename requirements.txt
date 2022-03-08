@@ -5,3 +5,4 @@ yacs
 termcolor
 pytorch-lightning
 wandb
+deepspeed
