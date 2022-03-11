@@ -27,9 +27,5 @@ class LanguagePath(nn.Module):
         S=self.twoLayerNet(fusion_feat)
         return fusion_feat*S+vis_feat
 
-if __name__=="__main__":
-    fusion_feat=torch.rand(4,32,64,64)
-    vis_feat=torch.rand(4,32,64,64)
-    LG=LanguagePath(32)
-    print(LG(vis_feat,fusion_feat).size())
+
 

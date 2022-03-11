@@ -1,5 +1,3 @@
-from functools import total_ordering
-from math import modf
 import torch 
 import os
 import torch.nn.functional as F
@@ -28,6 +26,7 @@ def main(args,cfg):
     local_rank=dist.get_rank()
     
     # build module
+    torch.cuda.set_device(local_rank)
     model=LVAT(cfg,logger)
     model.cuda(local_rank)
     model=torch.nn.parallel.DistributedDataParallel(model,device_ids=[local_rank],find_unused_parameters=True)

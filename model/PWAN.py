@@ -61,11 +61,7 @@ class PixelWordAttention(nn.Module):
 
         return out_feat
 
-if __name__=="__main__":
-    vis_feat=torch.rand(4,32,64,64)
-    lan_feat=torch.rand(4,128,20)
-    pwan=PixelWordAttention(32,128)
-    print(pwan(vis_feat,lan_feat).size())
+
 
 
 

@@ -17,7 +17,7 @@ class ReferDataset(data.Dataset):
     def __init__(self,
                  args,
                  image_transforms=None,
-                 max_tokens=20, 
+                 max_tokens=30, 
                  split='train',
                  eval_mode=False) -> None:
         """
