@@ -1,0 +1,7 @@
+timm
+pycocotools
+transformers
+yacs
+termcolor
+pytorch-lightning
+wandb
