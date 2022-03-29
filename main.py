@@ -37,7 +37,8 @@ def main(args, cfg):
     model = LAVT(cfg, args)
     trainer = pl.Trainer(max_epochs=args.epoch,
                          gpus=4,
-                         strategy=CustomDDPPlugin(stage=2, offload_optimizer=True),
+                         strategy='ddp',
+                         #strategy=CustomDDPPlugin(stage=2, offload_optimizer=True),
                          # 'deepspeed_stage_2', #CustomDDPPlugin(), #'deepspeed_stage_2_offload', #'deepspeed_stage_2_offload',
                          gradient_clip_val=0.5,
                          num_sanity_val_steps=0)

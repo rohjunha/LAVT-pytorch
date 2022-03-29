@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn.functional as F
+from torch.optim import AdamW
 import transformers
 from deepspeed.ops.adam import DeepSpeedCPUAdam
 
@@ -31,7 +32,7 @@ class LAVT(pl.LightningModule):
         return F.interpolate(pred, scale_factor=int(H // h), mode='bilinear', align_corners=True)
 
     def configure_optimizers(self):
-        opt_cls = DeepSpeedCPUAdam
+        opt_cls = AdamW  #DeepSpeedCPUAdam
         optimizer = opt_cls(self.parameters(),
                             lr=self.args.lr,
                             weight_decay=self.args.weight_decay)

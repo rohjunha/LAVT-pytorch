@@ -28,10 +28,10 @@ def get_parser():
     parser.add_argument("--power", default=1.0, type=float, help="power of polynomial learning rate")
     parser.add_argument("--max_decay_steps", default=40, type=int, help="max_decay_steps for polynomial learning ")
     # training set
-    parser.add_argument("--batch_size", default=1, type=int, help="batch size per GPU")
+    parser.add_argument("--batch_size", default=4, type=int, help="batch size per GPU")
     parser.add_argument("--epoch", default=50, type=int, help="training epoch")
     parser.add_argument("--print-freq", default=100, type=int, help="the frequent of print")
-    parser.add_argument("--size", default=384, type=int, help="the size of image")
+    parser.add_argument("--size", default=448, type=int, help="the size of image")
     parser.add_argument("--resume", action="store_true", help="start from a check point")
     parser.add_argument("--start_epoch", default=0, type=int, help="start epoch")
     # Only evaluate
